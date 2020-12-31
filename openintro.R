@@ -1,4 +1,4 @@
-setwd("/Users/mau/OneDrive - Unime/Learning/Openintro statistics")
+setwd("/Users/mau/github/practice")
 
 ###Plot page 41 of the book, Figure 2.1###
 loan50 <- read.delim("loan50.csv",header=TRUE,sep=",") #load the data
@@ -86,3 +86,7 @@ yhat <- predict(nl_model,newdata <- county)
 points(yhat~county$poverty,xlim=c(0,52),ylim=c(0,130000),type="p",cex=.1)
 ###
 
+###Plot page 45 of the book, Figure 2.6###
+loan50 <- read.delim("loan50.csv",header=TRUE,sep=",") #load the data
+hist(loan50$interest_rate,breaks=c(5,7.5,10,12.5,15,17.5,20,22.5,25,27.5),xlim=c(5,30),xaxt="n",main="Counts for the binned interest_rate data",xlab="Interest Rate")
+axis(1,at=c(5,10,15,20,25),labels=c("5%","10%","15%","20%","25%"))
