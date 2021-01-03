@@ -1,9 +1,9 @@
 setwd("/Users/mau/github/practice")
+loan50 <- read.delim("loan50.csv",header=TRUE,sep=",") #loading relevant datasets
+county <- read.delim("county.csv",header=TRUE,sep=",")
 
-###Plot page 41 of the book, Figure 2.1###
-loan50 <- read.delim("loan50.csv",header=TRUE,sep=",") #load the data
-
-###Setting axes labels and tick marks in advance
+###Plot page 41 of the book, Figure 2.1### *loan50*
+#Setting up axes labels and tick marks in advance
 l_xmarks <- c(0,50000,100000,150000,200000,250000,300000,350000)
 l_xlabels <- c("$0","$50k","$100k","$150k","$200k","$250k","$300k","$350k")
 l_ymarks <- c(0,10000,20000,30000,40000)
@@ -62,11 +62,9 @@ axis(1,tick=TRUE,at=l_xmarks,labels=l_xlabels,cex.axis=.8,col="#44447799",col.ax
 axis(2,tick=TRUE,at=l_ymarks,labels=l_ylabels,las=2,cex.axis=.8,col="#44447799",col.axis="#44447799")
 abline(h=l_ymarks,v=l_xmarks,col=c("#EDEDED","#EDEDED"))
 points(loan_amount~total_income,data=loan50,pch=19,col="#8877AACC",panel.first=plot_region())
-###
+######
 
-###Plot page 42 of the book, Figure 2.2###
-county <- read.delim("county.csv",header=TRUE,sep=",")
-
+###Plot page 42 of the book, Figure 2.2### *county*
 c_xmarks <- c(0,10,20,30,40,50)
 c_xlabels <- c("0%","10%","20%","30%","40%","50%")
 c_ymarks <- c(0,20000,40000,60000,80000,100000,120000)
@@ -84,9 +82,58 @@ county$pov_sq <- county$poverty^2
 nl_model <- lm(county$median_hh_income~county$poverty+county$pov_sq)
 yhat <- predict(nl_model,newdata <- county)
 points(yhat~county$poverty,xlim=c(0,52),ylim=c(0,130000),type="p",cex=.1)
-###
+######
 
-###Plot page 45 of the book, Figure 2.6###
-loan50 <- read.delim("loan50.csv",header=TRUE,sep=",") #load the data
-hist(loan50$interest_rate,breaks=c(5,7.5,10,12.5,15,17.5,20,22.5,25,27.5),xlim=c(5,30),xaxt="n",main="Counts for the binned interest_rate data",xlab="Interest Rate")
-axis(1,at=c(5,10,15,20,25),labels=c("5%","10%","15%","20%","25%"))
+###Plot page 45 of the book, Figure 2.6### *loan50*
+bb <- c(5,7.5,10,12.5,15,17.5,20,22.5,25,27.5) #bin breaks
+hist(loan50$interest_rate,breaks=bb,xlim=c(5,30),xaxt="n",main="Counts for the binned interest_rate data",xlab="Interest Rate")
+axis(1,at=c(5,10,15,20,25,30),labels=c("5%","10%","15%","20%","25%",""))
+clip(0,29,0,15)
+abline(h=0,lwd=1.5)
+
+#Just for further practice, I could see what happens when I set intervals at 5
+#percent points instead of 2.5: what happens is that each bar groups a larger
+#number of observations, hence fewer bars are needed to represent the data
+bb2 <- c(5,10,15,20,25,30) #bin breaks
+hist(loan50$interest_rate,breaks=bb2,xlim=c(5,30),xaxt="n",main="Counts for the binned interest_rate data",xlab="Interest Rate")
+axis(1,at=c(5,10,15,20,25,30),labels=c("5%","10%","15%","20%","25%",""))
+clip(0,29,0,15)
+abline(h=0,lwd=1.5)
+#After drawing the new plot, the skew is even more evident, as well as the
+#unimodality of the distribution
+######
+
+###Plot page 49 of the book, Figure 2.10### *loan50*
+boxplot(loan50$interest_rate,col="#FFFFFF")
+boxplot(loan50$interest_rate,plot=FALSE) #values on which the plot is based
+quantile(loan50$interest_rate,probs=seq(0,1,.25))
+######
+
+###Plot page 52 of the book, Figure 2.13### *county*
+hist(county$pop2010,xaxt="n",las=2,xlab="Population (m=millions)")
+axis(1,at=seq(0,10000000,by=2000000),labels=c("0m","2m","4m","6m","8m","10m"))
+
+#logarithm of population data in base=e
+hist(log(county$pop2010),xaxt="n",las=2,xlab="ln(Population)")
+axis(1,at=seq(0,16,by=2),labels=c("0","2","4","6","8","10","12","14","16"))
+
+#logarithm of population data in base=10
+hist(log10(county$pop2010),xaxt="n",las=2,xlab="log10(Population)")
+axis(1,at=seq(0,8,by=1),labels=c("0","1","2","3","4","5","6","7","8"))
+######
+
+###Plot page 53 of the book, Figure 2.14### *county*
+par(mfrow=c(1,2))
+plot(pop_change~pop2010,data=county,xaxt="n",yaxt="n",type="n",xlab="Population before change (m=millions)",ylab="Population change")
+axis(1,at=seq(0,10000000,by=2000000),labels=c("0m","2m","4m","6m","8m","10m"))
+axis(2,at=seq(-40,40,by=20),labels=c("-40%","-20%","0%","20%","40%"),las=2)
+abline(h=seq(-40,40,by=20),v=seq(0,10000000,by=2000000),col="#EDEDED")
+points(pop_change~pop2010,data=county,pch=10,col="#7F7C7C",cex=.7)
+
+plot(pop_change~log10(pop2010),data=county,xaxt="n",yaxt="n",type="n",xlab="log10(Population before change)",ylab="Population change")
+axis(1,at=seq(0,7,by=1),labels=c("0","1","2","3","4","5","6","7"))
+axis(2,at=seq(-40,40,by=20),labels=c("-40%","-20%","0%","20%","40%"),las=2)
+abline(h=seq(-40,40,by=20),v=seq(0,7,by=1),col="#EDEDED")
+points(pop_change~log10(pop2010),data=county,pch=10,col="#7F7C7C",cex=.7)
+######
+
