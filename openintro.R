@@ -143,11 +143,17 @@ points(pop_change~log10(pop2010),data=county,pch=10,col="#7F7C7C",cex=.7)
 layout(matrix(c(1,1,2,2),nrow=1))
 ######
 
-###Contingency tables page 61 of the book, Figure 2.17 and 2.18### *loans*
-t_loans_1 <- table(loans$application_type,loans$homeownership)
-t_loans <- addmargins(t_loans_1,c(1,2),FUN=sum,quiet=TRUE)
+###Contingency tables page 61 of the book, Figures 2.17 and 2.18### *loans*
+t_loans_1 <- table(loans$application_type,loans$homeownership) #contingency table
+t_loans <- addmargins(t_loans_1,c(1,2),FUN=sum,quiet=TRUE) #add margins (i.e. row and col sums) to contingency table
 t_hown <- as.data.frame(table(loans$homeownership))
 colnames(t_hown) <- c("homeownership","Count")
+row_t_loans <- addmargins(t_loans_1,1) #add only row margins (sum by column)
+colnames(row_t_loans) <- c("mortgage","own","rent")
+rownames(row_t_loans) <- c("individual","joint","Total")
+col_t_loans <- addmargins(t_loans_1,2) #add only col margins (sum by row)
+colnames(col_t_loans) <- c("mortgage","own","rent","Total")
+rownames(col_t_loans) <- c("individual","joint")
 ######
 
 ###Plots page 62 of the book, Figure 2.19### *loans*
@@ -158,3 +164,37 @@ barplot(prop.table(table(loans$homeownership)),xlab="Homeownership",ylab="Propor
 axis(2,las=2)
 ######
 
+###Proportions for the contingency tables, Figures 2.20 and 2.21### *loans*
+p_t_loans_1 <- proportions(t_loans_1) #Each entry in the table divided by their total
+
+#Figure 2.20
+p_by_row <- round(proportions(row_t_loans,margin=1),digits=3) #Each entry divided by their row total ("margin=1")
+p_row_t_loans <- cbind(p_by_row,rowSums(p_by_row)) #"addmargins(p_by_row,2)" would have been a simpler way of getting the same result
+colnames(p_row_t_loans) <- c("mortgage","own","rent","Total")
+rownames(p_row_t_loans) <- c("individual","joint","Total")
+
+#Figure 2.21
+p_by_col <- round(proportions(col_t_loans,margin=2),digits=3) #Each entry divided by their row total ("margin=1")
+p_col_t_loans <- rbind(p_by_col,colSums(p_by_col)) #"addmargins(p_by_col,1)" would have been a simpler way of getting the same result
+colnames(p_col_t_loans) <- c("mortgage","own","rent","Total")
+rownames(p_col_t_loans) <- c("individual","joint","Total")
+
+###Plots page 64 of the book, Figure 2.23### *loans*
+layout(matrix(c(1,2,3,3),nrow=2,byrow=TRUE)) #I also like this scheme: layout(matrix(c(1,2,3,3),nrow=2))
+colss <- c("grey","grey93")
+barplot(row_t_loans[1:2,],xlab="(a)",ylab="Frequency",yaxt="n",col=colss)
+axis(2,las=2)
+legend("top",c("individual","joint"),fill=colss,cex=.6)
+barplot(row_t_loans[1:2,],xlab="(b)",ylim=c(0,4000),ylab="Frequency",yaxt="n",beside=TRUE,col=colss)
+axis(2,las=2)
+legend("top",c("individual","joint"),fill=colss,cex=.6)
+barplot(p_col_t_loans[1:2,1:3],xlab="(c)",ylim=c(0,1),ylab="Proportion",yaxt="n",col=colss)
+axis(2,las=2)
+legend("bottomright",c("individual","joint"),fill=colss,cex=.7)
+######
+
+###Plots page 65 of the book, Figure 2.24### *loans*
+layout(matrix(c(1,1,2,2),nrow=1))
+mosaicplot(table(loans$homeownership),main="",)
+mosaicplot(table(loans$homeownership,loans$application_type),main="")
+######
