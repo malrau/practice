@@ -1,6 +1,7 @@
 setwd("/Users/mau/github/practice")
 loan50 <- read.delim("loan50.csv",header=TRUE,sep=",") #loading relevant datasets
 county <- read.delim("county.csv",header=TRUE,sep=",")
+loans <- read.delim("loans_full_schema.csv",header=TRUE,sep=",")
 
 ###Plot page 41 of the book, Figure 2.1### *loan50*
 #Setting up axes labels and tick marks in advance
@@ -135,5 +136,25 @@ axis(1,at=seq(0,7,by=1),labels=c("0","1","2","3","4","5","6","7"))
 axis(2,at=seq(-40,40,by=20),labels=c("-40%","-20%","0%","20%","40%"),las=2)
 abline(h=seq(-40,40,by=20),v=seq(0,7,by=1),col="#EDEDED")
 points(pop_change~log10(pop2010),data=county,pch=10,col="#7F7C7C",cex=.7)
+
+#Alternatively, I could use the function "layout": it allows to consider the
+#window where plots are drawn as if it were a matrix, so that each plot can
+#be drawn in a cell of the matrix, whose dimension can be chosen.
+layout(matrix(c(1,1,2,2),nrow=1))
+######
+
+###Contingency tables page 61 of the book, Figure 2.17 and 2.18### *loans*
+t_loans_1 <- table(loans$application_type,loans$homeownership)
+t_loans <- addmargins(t_loans_1,c(1,2),FUN=sum,quiet=TRUE)
+t_hown <- as.data.frame(table(loans$homeownership))
+colnames(t_hown) <- c("homeownership","Count")
+######
+
+###Plots page 62 of the book, Figure 2.19### *loans*
+layout(matrix(c(1,1,2,2),nrow=1))
+barplot(table(loans$homeownership),xlab="Homeownership",ylab="Frequency",yaxt="n")
+axis(2,las=2)
+barplot(prop.table(table(loans$homeownership)),xlab="Homeownership",ylab="Proportion",yaxt="n")
+axis(2,las=2)
 ######
 
