@@ -2,7 +2,8 @@
 title: "edX - Statistics and R"
 author: "Maurizio La Rosa"
 date: "13/01/2021"
-output: 
+output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
