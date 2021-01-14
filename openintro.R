@@ -181,20 +181,30 @@ rownames(p_col_t_loans) <- c("individual","joint","Total")
 
 ###Plots page 64 of the book, Figure 2.23### *loans*
 layout(matrix(c(1,2,3,3),nrow=2,byrow=TRUE)) #I also like this scheme: layout(matrix(c(1,2,3,3),nrow=2))
-colss <- c("grey","grey93")
-barplot(row_t_loans[1:2,],xlab="(a)",ylab="Frequency",yaxt="n",col=colss)
+colss <- c("#F0F0F0","#BDBDBD","#636363")
+barplot(row_t_loans[1:2,],xlab="(a)",ylab="Frequency",yaxt="n",col=colss[1:2])
 axis(2,las=2)
 legend("top",c("individual","joint"),fill=colss,cex=.6)
-barplot(row_t_loans[1:2,],xlab="(b)",ylim=c(0,4000),ylab="Frequency",yaxt="n",beside=TRUE,col=colss)
+barplot(row_t_loans[1:2,],xlab="(b)",ylim=c(0,4000),ylab="Frequency",yaxt="n",beside=TRUE,col=colss[1:2])
 axis(2,las=2)
 legend("top",c("individual","joint"),fill=colss,cex=.6)
-barplot(p_col_t_loans[1:2,1:3],xlab="(c)",ylim=c(0,1),ylab="Proportion",yaxt="n",col=colss)
+barplot(p_col_t_loans[1:2,1:3],xlab="(c)",ylim=c(0,1),ylab="Proportion",yaxt="n",col=colss[1:2])
 axis(2,las=2)
 legend("bottomright",c("individual","joint"),fill=colss,cex=.7)
 ######
 
 ###Plots page 65 of the book, Figure 2.24### *loans*
-layout(matrix(c(1,1,2,2),nrow=1))
-mosaicplot(table(loans$homeownership),main="",)
-mosaicplot(table(loans$homeownership,loans$application_type),main="")
+layout(matrix(c(1,2,3,3),nrow=2,byrow=TRUE))
+mosaicplot(table(loans$homeownership),main="",xlab="(a)",col=colss)
+mosaicplot(table(loans$homeownership,loans$application_type),main="",xlab="(b)",col=colss)
+mosaicplot(table(loans$application_type,loans$homeownership),main="",xlab="(b)",col=colss)
 ######
+
+###
+cr_sam_g <- subset(county,county$pop_change>0)
+cr_sam_ng <- subset(county,county$pop_change<=0)
+mhi_g <- round(cr_sam_g[runif(100,1,1541),14]/1000,digits=1)
+mhi_ng <- round(cr_sam_ng[runif(100,1,1598),14]/1000,digits=1)
+barplot(matrix(c(mhi_g,mhi_ng),ncol=2),beside=T)
+barplot(matrix(c(mhi_g[runif(10,1,100)],mhi_ng[runif(10,1,100)]),ncol=2),beside=F)
+
