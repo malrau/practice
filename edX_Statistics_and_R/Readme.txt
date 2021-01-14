@@ -1,0 +1,2 @@
+R project where I replicate the assessment pages from the edX course named "Statistics and R".
+It serves me as a practicing instrument to better learn R Markdown and html integration (since I mainly generate html pages).
