@@ -3,7 +3,6 @@ title: "edX - Statistics and R"
 author: "Maurizio La Rosa"
 date: "13/01/2021"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -16,6 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # First assessment: Exercises
 <hr style="height:2px;border-width:0;color:gray;background-color:black">
 <br></br>
+
+Go through the R Programming Basic Building Blocks tutorial and then *use the skills you have just learned to answer the following questions*.
 
 ## Exercise #1
 
