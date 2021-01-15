@@ -1,0 +1,98 @@
+---
+title: "dplyr Exercises"
+author: "Maurizio La Rosa"
+date: "15/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# dplyr Exercises
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+For these exercises, we will use a new dataset related to mammalian sleep. This link describes the data.
+We are going to read in this data, then test your knowledge of they key dplyr functions select and filter. We are also going to review two different _classes_: data frames and vectors.
+
+## dplyr Exercises #1
+
+<font size="0.7">1 point possible (graded)</font>
+
+Read in the `msleep_ggplot2.csv` file with the function `read.csv` and use the function `class` to determine what type of object is returned.
+
+```{r 1, echo=FALSE}
+data <- read.delim("msleep_ggplot2.csv",header=TRUE,sep=",")
+View(data)
+head(data)
+class(data)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## dplyr Exercises #2
+
+<font size="0.7">1 point possible (graded)</font>
+
+Now use the `filter` function to select only the primates. How many animals in the table are primates? Hint: the `nrow` function gives you the number of rows of a data frame or matrix.
+
+```{r 2, echo=FALSE}
+primates <- filter(data,order=="Primates")
+nrow(primates)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## dplyr Exercise #3
+
+<font size="0.7">1 point possible (graded)</font>
+
+What is the class of the object you obtain after subsetting the table to only include primates?
+
+```{r 3, echo=FALSE}
+class(primates)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## dplyr Exercise #4
+
+<font size="0.7">1 point possible (graded)</font>
+
+Now use the `select` function to extract the sleep (total) for the primates. What class is this object? Hint: use `%>%` to pipe the results of the `filter` function to `select.`
+
+```{r 4, echo=FALSE}
+filter(data,order=="Primates") %>% select(sleep_total) %>% class
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## dplyr Exercise #5
+
+<font size="0.7">1 point possible (graded)</font>
+
+Now we want to calculate the average amount of sleep for primates (the average of the numbers computed above). One challenge is that the `mean` function requires a vector so, if we simply apply it to the output above, we get an error. Look at the help file for `unlist` and use it to compute the desired average.
+
+```{r 5, echo=FALSE}
+primates_sleep <- unlist(select(primates,sleep_total))
+mean(primates_sleep)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## dplyr Exercise #6
+
+<font size="0.7">1 point possible (graded)</font>
+
+For the last exercise, we could also use the dplyr `summarize` function. We have not introduced this function, but you can read the help file and repeat exercise 5, this time using just `filter` and `summarize` to get the answer.
+
+```{r 6, echo=FALSE}
+filter(data,order=="Primates") %>% summarise(mean=mean(sleep_total))
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

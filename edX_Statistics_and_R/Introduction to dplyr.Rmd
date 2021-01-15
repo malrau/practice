@@ -1,0 +1,65 @@
+---
+title: "Introduction to dplyr"
+author: "Maurizio La Rosa"
+date: "15/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load the data
+
+```{r data}
+mice_data <- read.delim("femaleMiceWeights.csv",header=TRUE,sep=",")
+View(mice_data)
+print(mice_data)
+```
+
+### Load the `dplyr` package
+
+```{r dplyr}
+library(dplyr)
+```
+
+### Command: `filter`
+
+`filter` lets you filter certain rows, certain observations of the data set. Here i filter by the control group, i.e. the mice whose diet is not high fat. What I effectively get is a subset of the data set.
+
+```{r filter, echo=FALSE}
+controls <- filter(mice_data,Diet=="chow")
+View(controls)
+print(controls)
+```
+
+
+### Command: `select`
+
+`select` lets you select certain columns, certain variables in the data set. I will use it to select the weights in the control group and then make a numerical vector of the selection, because many of the functions I'm going to use later make use of that.
+
+```{r select, echo=FALSE}
+controls_w1 <- select(controls,Bodyweight)
+controls_w <- unlist(controls_w1)
+print(controls_w)
+```
+
+### Using a `pipe` within `dplyr`
+
+Making use of a `pipe` lets me perform the above steps in only one line of intuitive code. I perform the above steps for the high fat group.
+
+```{r pipe, echo=FALSE}
+treated_w <- filter(mice_data,Diet=="hf") %>% select(Bodyweight) %>% unlist
+print(treated_w)
+```
+
+### Exploring the data
+
+After having treated the data with filtering and selecting those of interest, I can perform data analysis and plotting
+
+```{r analysis, echo=FALSE}
+mean(controls_w)
+mean(treated_w)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
