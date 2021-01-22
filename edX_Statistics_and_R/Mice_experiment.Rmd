@@ -1,0 +1,64 @@
+---
+title: "Mice experiment"
+author: "Maurizio La Rosa"
+date: "22/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load the data
+
+```{r data}
+mice_data <- read.delim("femaleMiceWeights.csv",header=TRUE,sep=",")
+print(mice_data)
+```
+
+### Load the `dplyr` package
+
+```{r dplyr}
+library(dplyr)
+```
+
+### Subset the data
+
+I filter the data by the control group, i.e. the mice whose diet is not high fat and the treatment group, i.e. the mice whose diet is high fat. I get two subsets of the data set. Then, using the pipe operator, I select the bodyweight variable for each group.
+
+```{r filter, echo=FALSE}
+control_w <- filter(mice_data,Diet=="chow") %>% select(Bodyweight) %>% unlist
+treatment_w <- filter(mice_data,Diet=="hf") %>% select(Bodyweight) %>% unlist
+View(control_w)
+View(treatment_w)
+```
+
+
+### Compare the means of the two groups
+
+We compare the means of the two groups because we are interested in knowing if the high fat diet has consequences on mice that received that treatment, and if, on average, that determines that there is a difference between the weight of the two mice groups.
+
+```{r select, echo=FALSE}
+mean(control_w)
+mean(treatment_w)
+```
+
+### Using a `pipe` within `dplyr`
+
+Making use of a `pipe` lets me perform the above steps in only one line of intuitive code. I perform the above steps for the high fat group.
+
+```{r pipe, echo=FALSE}
+treated_w <- filter(mice_data,Diet=="hf") %>% select(Bodyweight) %>% unlist
+print(treated_w)
+```
+
+### Exploring the data
+
+After having treated the data with filtering and selecting those of interest, I can perform data analysis and plotting
+
+```{r analysis, echo=FALSE}
+mean(controls_w)
+mean(treated_w)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
