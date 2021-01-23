@@ -1,0 +1,88 @@
+---
+title: "Mice experiment"
+author: "Maurizio La Rosa"
+date: "22/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load the data
+
+```{r data}
+mice_data <- read.delim("femaleMiceWeights.csv",header=TRUE,sep=",")
+print(mice_data)
+```
+
+### Load the `dplyr` package
+
+```{r dplyr}
+library(dplyr)
+```
+
+### Subset the data
+
+I filter the data by the control group, i.e. the mice whose diet is not high fat and the treatment group, i.e. the mice whose diet is high fat. I get two subsets of the data set. Then, using the pipe operator, I select the bodyweight variable for each group.
+
+```{r filter, echo=FALSE}
+control_w <- filter(mice_data,Diet=="chow") %>% select(Bodyweight) %>% unlist
+treatment_w <- filter(mice_data,Diet=="hf") %>% select(Bodyweight) %>% unlist
+View(control_w)
+View(treatment_w)
+```
+
+
+### Compare the means of the two groups
+
+We compare the means of the two groups because we are interested in knowing if the high fat diet has consequences on mice that received that treatment, and if, on average, that determines that there is a difference between the weight of the two mice groups.
+
+```{r select, echo=FALSE}
+mean(control_w)
+mean(treatment_w)
+```
+
+### Group means as random variables
+
+We can consider the means computed above as two random variables (if we had chosen two different treatment and control groups we would have obtained two different values for their means, although the treatment mean would likely be still higher than the control mean)
+
+In analysing the treatment effect we first compare the two means: by subtracting the control from the treatment we get to know that "high fat diet" mice weight 3 grams more than the "chow diet" mice.
+
+```{r pipe, echo=FALSE}
+mean_t <- mean(treatment_w) #mean weight of the treatment group
+mean_c <- mean(control_w) #mean weight of the control group
+mean_t-mean_c
+```
+
+Of course this result might be due to chance: if we took 24 different mice and administer half of them the "chow diet" and the other half the "high fat diet" we would obtain a heavier control group and a lighter treatment group. By accessing the entire data set for the mice population experiment (not the 24 mice subset with which we have worked until now) we can subset various random 24 mice group (half treatment and half control) and compute their means. We will find that these means are always different (this is why the means can be considered random variables), but the *treatment* means will be larger than the *control* means.
+
+### Load the control population
+
+I load the control population, have a look at it and the I convert the data.frame into a numeric vector, that I can use to perform operations.
+
+```{r analysis, echo=FALSE}
+control_population <- read.delim("femaleControlsPopulation.csv",header=TRUE,sep=",")
+class(control_population)
+dim(control_population)
+control_pop <- unlist(control_population) #the function "unlist" allows me to convert the data frame into a numeric vector
+dim(control_pop) #the function "dim" returns a NULL
+length(control_pop) #length returns the vector length
+class(control_pop)
+```
+
+### Sample the control population
+
+We use the `sample` function to extract a random sample fro the entire population. If we perform this again and again we always get a different result (the sample extracted from the population is always different). This is why we think of these means as random variables.
+
+```{r, echo=FALSE}
+control_sam <- sample(control_pop,12)
+mean(control_sam)
+
+mean(sample(control_pop,12))
+mean(sample(control_pop,12))
+mean(sample(control_pop,12))
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
