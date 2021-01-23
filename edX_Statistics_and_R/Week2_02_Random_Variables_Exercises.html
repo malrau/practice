@@ -190,91 +190,59 @@ summary {
 
 <h1 class="title toc-ignore">edX - Statistics and R</h1>
 <h4 class="author">Maurizio La Rosa</h4>
-<h4 class="date">22/01/2021</h4>
+<h4 class="date">23/01/2021</h4>
 
 </div>
 
 
 <hr style="height:2px;border-width:0;color:gray;background-color:black">
-<div id="mice-experiment" class="section level1">
-<h1>Mice experiment</h1>
+<div id="random-variables-exercises" class="section level1">
+<h1>Random Variables Exercises</h1>
 <hr style="height:2px;border-width:0;color:gray;background-color:black">
 <p><br /></p>
-<div id="load-the-data" class="section level3">
-<h3>Load the data</h3>
-<pre class="r"><code>mice_data &lt;- read.delim(&quot;femaleMiceWeights.csv&quot;,header=TRUE,sep=&quot;,&quot;)
-print(mice_data)</code></pre>
-<pre><code>##    Diet Bodyweight
-## 1  chow      21.51
-## 2  chow      28.14
-## 3  chow      24.04
-## 4  chow      23.45
-## 5  chow      23.68
-## 6  chow      19.79
-## 7  chow      28.40
-## 8  chow      20.98
-## 9  chow      22.51
-## 10 chow      20.10
-## 11 chow      26.91
-## 12 chow      26.25
-## 13   hf      25.71
-## 14   hf      26.37
-## 15   hf      22.80
-## 16   hf      25.34
-## 17   hf      24.97
-## 18   hf      28.14
-## 19   hf      29.58
-## 20   hf      30.92
-## 21   hf      34.02
-## 22   hf      21.90
-## 23   hf      31.53
-## 24   hf      20.73</code></pre>
+<p>For these exercises, we will use the dataset of the entire mice control population. We load it and <code>unlist</code> it, in order to deal with a numerical vector. <code>control_pop</code> represents the weights for the entire mice population.</p>
+<pre><code>## Bodyweight1 Bodyweight2 Bodyweight3 Bodyweight4 Bodyweight5 Bodyweight6 
+##       27.03       24.80       27.02       28.07       23.55       22.72</code></pre>
+<div id="random-variables-exercises-1" class="section level2">
+<h2>Random Variables Exercises #1</h2>
+<p><font size="0.7">1 point possible (graded)</font></p>
+<p>What is the average of these weights?</p>
+<pre><code>## [1] 23.89338</code></pre>
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<p><br /></p>
 </div>
-<div id="load-the-dplyr-package" class="section level3">
-<h3>Load the <code>dplyr</code> package</h3>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
+<div id="random-variables-exercises-2" class="section level2">
+<h2>Random Variables Exercises #2</h2>
+<p><font size="0.7">1 point possible (graded)</font></p>
+<p>After setting the seed at 1, <code>set.seed(1)</code> take a random sample of size 5. What is the absolute value (use <code>abs</code>) of the difference between the average of the sample and the average of all the values?</p>
+<pre><code>## [1] 0.3293778</code></pre>
+The result is wrong.<br />
+However, setting the seed at 1 only returns this value (the accepted result is: 0.2706222, hence the sample mean should be around: 23.62276).
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<p><br /></p>
 </div>
-<div id="subset-the-data" class="section level3">
-<h3>Subset the data</h3>
-<p>I filter the data by the control group, i.e. the mice whose diet is not high fat and the treatment group, i.e. the mice whose diet is high fat. I get two subsets of the data set. Then, using the pipe operator, I select the bodyweight variable for each group.</p>
+<div id="random-variables-exercise-3" class="section level2">
+<h2>Random Variables Exercise #3</h2>
+<p><font size="0.7">1 point possible (graded)</font></p>
+<p>After setting the seed at 5, <code>set.seed(5)</code> take a random sample of size 5. What is the absolute value of the difference between the average of the sample and the average of all the values?</p>
+<pre><code>## [1] 0.3813778</code></pre>
+The result is wrong.<br />
+However, setting the seed at 5 only returns this value (The accepted result is: 1.433378, hence the mean should be: 22.46)
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<p><br /></p>
 </div>
-<div id="compare-the-means-of-the-two-groups" class="section level3">
-<h3>Compare the means of the two groups</h3>
-<p>We compare the means of the two groups because we are interested in knowing if the high fat diet has consequences on mice that received that treatment, and if, on average, that determines that there is a difference between the weight of the two mice groups.</p>
-<pre><code>## [1] 23.81333</code></pre>
-<pre><code>## [1] 26.83417</code></pre>
-</div>
-<div id="group-means-as-random-variables" class="section level3">
-<h3>Group means as random variables</h3>
-<p>We can consider the means computed above as two random variables (if we had chosen two different treatment and control groups we would have obtained two different values for their means, although the treatment mean would likely be still higher than the control mean)</p>
-<p>In analysing the treatment effect we first compare the two means: by subtracting the control from the treatment we get to know that “high fat diet” mice weight 3 grams more than the “chow diet” mice.</p>
-<pre><code>## [1] 3.020833</code></pre>
-<p>Of course this result might be due to chance: if we took 24 different mice and administer half of them the “chow diet” and the other half the “high fat diet” we would obtain a heavier control group and a lighter treatment group. By accessing the entire data set for the mice population experiment (not the 24 mice subset with which we have worked until now) we can subset various random 24 mice group (half treatment and half control) and compute their means. We will find that these means are always different (this is why the means can be considered random variables), but the <em>treatment</em> means will be larger than the <em>control</em> means.</p>
-</div>
-<div id="load-the-control-population" class="section level3">
-<h3>Load the control population</h3>
-<p>I load the control population, have a look at it and then I convert the data frame into a numeric vector, that I can use to perform operations.</p>
-<pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<pre><code>## [1] 225   1</code></pre>
-<pre><code>## NULL</code></pre>
-<pre><code>## [1] 225</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-</div>
-<div id="sample-the-control-population" class="section level3">
-<h3>Sample the control population</h3>
-<p>We use the <code>sample</code> function to extract a random sample from the entire population and we compute the sample mean. If we perform this again and again we always get a different result (the sample extracted from the population is always different). This is why we think of these means as random variables.</p>
-<pre><code>## [1] 24.1125</code></pre>
-<pre><code>## [1] 23.895</code></pre>
-<pre><code>## [1] 23.18667</code></pre>
-<pre><code>## [1] 23.90167</code></pre>
+<div id="random-variables-exercise-4" class="section level2">
+<h2>Random Variables Exercise #4</h2>
+<p><font size="0.7">1 point possible (graded)</font></p>
+<p>Why are the answers from 2 and 3 different?`</p>
+<p>Because we made a coding mistake.<br />
+Because the average of the x is random.<br />
+Because the average of the samples is a random variable.<br />
+All of the above.<br />
+</p>
+<pre><code>## [1] &quot;Because the average of the samples is a random variable&quot;</code></pre>
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<p><br /></p>
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
 </div>
 </div>

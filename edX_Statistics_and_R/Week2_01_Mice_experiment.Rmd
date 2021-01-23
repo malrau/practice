@@ -1,5 +1,5 @@
 ---
-title: "Mice experiment"
+title: "edX - Statistics and R"
 author: "Maurizio La Rosa"
 date: "22/01/2021"
 output: html_document
@@ -8,6 +8,11 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Mice experiment
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
 
 ### Load the data
 
@@ -59,7 +64,7 @@ Of course this result might be due to chance: if we took 24 different mice and a
 
 ### Load the control population
 
-I load the control population, have a look at it and the I convert the data.frame into a numeric vector, that I can use to perform operations.
+I load the control population, have a look at it and then I convert the data frame into a numeric vector, that I can use to perform operations.
 
 ```{r analysis, echo=FALSE}
 control_population <- read.delim("femaleControlsPopulation.csv",header=TRUE,sep=",")
@@ -73,7 +78,7 @@ class(control_pop)
 
 ### Sample the control population
 
-We use the `sample` function to extract a random sample fro the entire population. If we perform this again and again we always get a different result (the sample extracted from the population is always different). This is why we think of these means as random variables.
+We use the `sample` function to extract a random sample from the entire population and we compute the sample mean. If we perform this again and again we always get a different result (the sample extracted from the population is always different). This is why we think of these means as random variables.
 
 ```{r, echo=FALSE}
 control_sam <- sample(control_pop,12)

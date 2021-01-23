@@ -1,5 +1,5 @@
 ---
-title: "Introduction to dplyr"
+title: "edX - Statistics and R"
 author: "Maurizio La Rosa"
 date: "15/01/2021"
 output: html_document
@@ -8,6 +8,11 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Introduction to dplyr
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
 
 ### Load the data
 
@@ -55,7 +60,7 @@ print(treated_w)
 
 ### Exploring the data
 
-After having treated the data with filtering and selecting those of interest, I can perform data analysis and plotting
+After having treated the data with filtering and selecting those of interest, I can perform data analysis and plotting. Those that follow are the means for the control and treatment group respectively.
 
 ```{r analysis, echo=FALSE}
 mean(controls_w)

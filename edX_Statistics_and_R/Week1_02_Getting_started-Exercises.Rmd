@@ -1,5 +1,5 @@
 ---
-title: "Getting Started Exercises"
+title: "edX - Statistics and R"
 author: "Maurizio La Rosa"
 date: "14/01/2021"
 output: 

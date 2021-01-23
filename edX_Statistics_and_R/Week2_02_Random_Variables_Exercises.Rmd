@@ -1,0 +1,90 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "23/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Random Variables Exercises
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+For these exercises, we will use the dataset of the entire mice control population. We load it and `unlist` it, in order to deal with a numerical vector.
+`control_pop` represents the weights for the entire mice population.
+
+```{r load the data, echo=FALSE}
+control_pop <- unlist(read.delim("femaleControlsPopulation.csv",header=TRUE,sep=","))
+head(control_pop)
+```
+
+
+## Random Variables Exercises #1
+
+<font size="0.7">1 point possible (graded)</font>
+
+What is the average of these weights?
+
+```{r 1, echo=FALSE}
+mean(control_pop)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Random Variables Exercises #2
+
+<font size="0.7">1 point possible (graded)</font>
+
+After setting the seed at 1, `set.seed(1)` take a random sample of size 5. What is the absolute value (use `abs`) of the difference between the average of the sample and the average of all the values?
+
+```{r 2, echo=FALSE}
+set.seed(1)
+sample_pop1 <- sample(control_pop,5)
+abs(mean(sample_pop1)-mean(control_pop))
+```
+The result is wrong. \
+However, setting the seed at 1 only returns this value (the accepted result is: 0.2706222, hence the sample mean should be around: 23.62276).
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Random Variables Exercise #3
+
+<font size="0.7">1 point possible (graded)</font>
+
+After setting the seed at 5, `set.seed(5)` take a random sample of size 5. What is the absolute value of the difference between the average of the sample and the average of all the values?
+
+```{r 3, echo=FALSE}
+set.seed(5)
+sample_pop5 <- sample(control_pop,5)
+abs(mean(sample_pop5)-mean(control_pop))
+```
+
+The result is wrong. \
+However, setting the seed at 5 only returns this value (The accepted result is: 1.433378, hence the mean should be: 22.46)
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Random Variables Exercise #4
+
+<font size="0.7">1 point possible (graded)</font>
+
+Why are the answers from 2 and 3 different?`
+
+Because we made a coding mistake. \
+Because the average of the x is random. \
+Because the average of the samples is a random variable. \
+All of the above. \
+
+```{r 4, echo=FALSE}
+answ_opt <- c("Because we made a coding mistake","Because the average of the x is random","Because the average of the samples is a random variable","All of the above")
+answ_opt[3] #my answer
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
