@@ -1,0 +1,94 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "24/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Null Distributions
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+### Load the data and generate the two groups (treatment and control)
+
+```{r data}
+library(dplyr)
+mice_data <- read.delim("femaleMiceWeights.csv",header=TRUE,sep=",")
+control_w <- filter(mice_data,Diet=="chow") %>% select(Bodyweight) %>% unlist
+treatment_w <- filter(mice_data,Diet=="hf") %>% select(Bodyweight) %>% unlist
+```
+
+### Comparing the means of the two groups
+
+I compute the difference between the mean weight of the two groups and store it in an R object (`obs` stands for observation).
+
+```{r means, echo=FALSE}
+obs <- mean(treatment_w)-mean(control_w)
+print(obs)
+```
+
+### Comparing the means of two *convenience* groups
+
+We use again the entire control population to perform statistical inference on our data. We test the Null Hypothesis on the data we have at hand. The Null Hypothesis is the *high fat* diet has no effect on mice weight. The Alternative Hypothesis is that the *high fat* diet has in fact an effect on mice weight. We test these hypotheses through statistical inference.
+For this example we are going to sample the two groups from the same population (mice control population), so we are guaranteed that there is no *high fat* diet effect (we are cheating for the purpose of understanding the mechanics of statistical inference).
+
+```{r select, echo=FALSE}
+control_pop <- unlist(read.delim("femaleControlsPopulation.csv",header=TRUE,sep=","))
+contr <- sample(control_pop,12)
+treat <- sample(control_pop,12)
+mean(treat)-mean(contr)
+```
+
+For the purpose of understanding we can repeat the above code in order to extract new *(fake) treatment* and *control* sample means. We can store the results in an R object and summarize the results. We use a `for` loop to replicate the difference in means as many times as we want and store them. Here we represents some of these differences.
+
+```{r loop, echo=FALSE}
+n <- 10000
+nulls <- vector("numeric",n)
+for(i in 1:n){
+  contr_ <- sample(control_pop,12)
+  treat_ <- sample(control_pop,12)
+  nulls[i] <- (mean(treat_)-mean(contr_))
+}
+print(head(nulls))
+```
+
+The Null Distribution represents all possible realizations under the Null Hypothesis. Wikipedia states that:
+
+    The null distribution is the distribution of two sets of data under a null hypothesis. If the results of the two sets of data are not outside the parameters of the expected results, then the null hypothesis is said to be true.
+
+If we know the distribution, we know the proportion of times that a specific value is realized.
+
+We can summarize the results and plot them in a histogram that returns the frequency of the values realized within a given interval.
+
+```{r nulls, echo=FALSE}
+summary(nulls)
+hist(nulls)
+```
+
+By looking at the histogram, for example, we can find out how likely it is that the difference in means is equal to 3: it seems as if the frequency of 3 is around 100-200 realizations.
+
+### Group means as random variables
+
+Now, if we count the realizations of the Null Distribution that exceed our `obs` and compute the proportion (proportion of times that the Null Distribution is greater than our sample observation) we get the p-value. It tells us how likely it is that, under the Null Hypothesis that the *high fat* diet has no effect on mice weight, we get a value larger than the one observed (`obs`).
+
+```{r pipe, echo=FALSE}
+sum(nulls>obs)/n
+mean(nulls>obs)
+```
+
+We can look at both tails of the distribution (negative and positive values) and consider the realizations of the Null Distribution that exceed our `obs` in absolute value. Now the proportion (the p-value) is around twice as big as before.
+
+```{r}
+mean(abs(nulls)>obs)
+```
+
+The p-value is the answer to the question, ***what is the probability that an outcome from the null distribution is bigger than what we observed when the null hypothesis is true***.
+Here the answer is >2.5%.
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

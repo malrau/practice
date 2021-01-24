@@ -1,0 +1,94 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "23/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Null Distribution Exercises
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+For these exercises, we will use the data set of the entire mice control population. We load it and `unlist` it, in order to deal with a numerical vector.
+`control_pop` represents the weights for the entire mice population.
+
+```{r load the data, echo=FALSE}
+control_pop <- unlist(read.delim("femaleControlsPopulation.csv",header=TRUE,sep=","))
+```
+
+
+## Null Distribution Exercises #1
+
+<font size="0.7">1 point possible (graded)</font>
+
+Set the seed at 1, then using a for-loop take a random sample of 5 mice 1000 times. Save these averages. What proportion of these 1000 averages are more than 1 gram away from the average of `control_pop`?
+
+```{r 1, echo=FALSE}
+n <- 1000
+set.seed(1)
+samp_avg <- vector("numeric",n)
+for(i in 1:n) {
+  r_samp <- sample(control_pop,5)
+  samp_avg[i] <- (mean(r_samp))
+}
+hist(samp_avg)
+mean(abs(samp_avg-mean(control_pop))>1)
+```
+The result is wrong. \
+However, setting the seed at 1 returns this value (The accepted result is: 0.498)
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Null Distribution Exercises #2
+
+<font size="0.7">1 point possible (graded)</font>
+
+Q:We are now going to increase the number of times we redo the sample from 1000 to 10000. Set the seed at 1, then using a for-loop take a random sample of 5 mice 10000 times. Save these averages. What percent of these 10000 averages are more than 1 ounce away from the average of `control_pop` ?
+
+```{r 2, echo=FALSE}
+n2 <- 10000
+set.seed(1)
+samp_avg2 <- vector("numeric",n2)
+for(i in 1:n2) {
+  r_samp2 <- sample(control_pop,5)
+  samp_avg2[i] <- (mean(r_samp2))
+}
+hist(samp_avg2)
+mean(abs(samp_avg2-mean(control_pop))>1)
+```
+The result is wrong. \
+However, setting the seed at 1 returns this value (The accepted result is: 0.4976)
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Null Distribution Exercise #3
+
+<font size="0.7">1 point possible (graded)</font>
+
+Q:Note that the answers to 4 and 5 barely changed. This is expected. The way we think about the random value distributions is as the distribution of the list of values obtained if we repeated the experiment an infinite number of times. On a computer, we can’t perform an infinite number of iterations so instead, for our examples, we consider 1000 to be large enough, thus 10000 is as well. Now if instead we change the sample size, then we change the random variable and thus its distribution.
+
+Set the seed at 1, then using a for-loop take a random sample of 50 mice 1000 times. Save these averages. What percent of these 1000 averages are more than 1 ounce away from the average of `control_pop` ?
+
+```{r 3, echo=FALSE}
+n3 <- 1000
+set.seed(1)
+samp_avg3 <- vector("numeric",n3)
+for(i in 1:n3) {
+  r_samp3 <- sample(control_pop,50)
+  samp_avg3[i] <- (mean(r_samp3))
+}
+hist(samp_avg3)
+mean(abs(samp_avg3-mean(control_pop))>1)
+```
+The result is wrong. \
+However, setting the seed at 1 returns this value (The accepted result is: 0.019)
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
