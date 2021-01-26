@@ -1,0 +1,52 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "26/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Probability Distributions
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+### Load the data
+
+```{r data}
+library(dplyr)
+father_son <- read.delim("father-son.csv",header=TRUE,sep=",")
+```
+
+### Plot the distribution of the fathers' heights
+
+Since it would be impossible or tedious or uncomfortable to have a look at 1078 observations at once, we rely on their representation by a histogram, which shows the occurrencies for an interval of realizations of heights.
+
+```{r means, echo=FALSE}
+hist(father_son$fheight)
+```
+From the histogram we can obtain useful information of the data. For example, we can compute the proportion of fathers whose heights fall below any given value. Given a specific value (say $a$), by using the histogram, we can compute pretty precisely the number of fathers who are shorter than height $a$ (and, by dividing them for the total number of fathers, we know their proportion).
+
+$F(a)=Pr(Height≤a)$
+
+In addition, given two values (say $a$ and $b$), using the histogram we can compute the proportion of fathers whose heights fall within that interval.
+Given $b>a$ the values of the proportions of fathers whose heights are below $a$ and below $b$, it would suffice to subtract the second proportion from the first one to get the result:
+
+$Pr(a≤Height≤b)=F(b)-F(a)$
+
+### Plot the Cumulative Distribution Function
+
+A function in the `stats` package allows us to compute the CDF of our values: `ecdf` (*empirical cumulative distribution function*), and we can consequently plot it. The CDF simplifies the computation of the above mentioned proportions because it adds up marginal proportions: this means that, if we pick any value $x$, the attached proportion ($f(x)$) returns the proportion of all values smaller than x $Pr(Height)≤x$.
+
+```{r ecdf, echo=FALSE}
+ecdf(father_son$fheight)
+layout(matrix(c(1,1,1,1,1,1),nrow=3,byrow=TRUE))
+plot(ecdf(father_son$fheight),main="",xlab="x=Height",ylab="F(x)")
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

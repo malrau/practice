@@ -1,0 +1,114 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "26/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Probability Distribution Exercises
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+In the video you just watched, Rafa looked at distributions of heights, and asked what was the probability of someone being shorter than a given height. In this assessment, we are going to ask the same question, but instead of people and heights, we are going to look at whole countries and the average life expectancy in those countries.
+
+We will use the data set called "Gapminder" which is available as an R-package on Github. This data set contains the life expectancy, GDP per capita, and population by country, every five years, from 1952 to 2007. It is an excerpt of a larger and more comprehensive set of data available on Gapminder.org, and the R package of this dataset was created by the statistics professor Jennifer Bryan.
+
+Load the gapminder data set. To return the first few lines of the data set, use the function head().
+
+Create a vector 'x' of the life expectancies of each country for the year 1952. Plot a histogram of these life expectancies to see the spread of the different countries.
+
+```{r load the data, echo=FALSE}
+load("gapminder.rdata") #(read.delim("femaleControlsPopulation.csv",header=TRUE,sep=","))
+```
+
+
+## Probability Distribution Exercises #1
+
+<font size="0.7">1 point possible (graded)</font>
+
+In statistics, *the empirical cumulative distribution function (or empirical cdf or empirical distribution function) is the function $F(a)$ for any $a$, which tells you the proportion of the values which are less than or equal to $a$*.
+
+We can compute $F$ in two ways: the simplest way is to type `mean(x <= a)`. This calculates the number of values in $x$ which are less than or equal $a$, divided by the total number of values in $x$, in other words the proportion of values less than or equal to $a$.
+
+The second way, which is a bit more complex for beginners, is to use the `ecdf()` function. This is a bit complicated because **this is a function that doesn't return a value, but a function**.
+
+Let's continue, using the simpler, `mean()` function.
+
+What is the proportion of countries in 1952 that have a life expectancy less than or equal to 40?
+
+```{r 1, echo=FALSE}
+gapmind <- subset(gapminder,year==1952)
+mean(gapmind$lifeExp<=40)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Probability Distribution Exercises #2
+
+<font size="0.7">1 point possible (graded)</font>
+
+What is the proportion of countries in 1952 that have a life expectancy between 40 and 60 years? Hint: this is the proportion that have a life expectancy less than or equal to 60 years, minus the proportion that have a life expectancy less than or equal to 40 years.
+
+```{r 2, echo=FALSE}
+mean(gapmind$lifeExp<=60)-mean(gapmind$lifeExp<=40)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+####`sapply()` on a custom function
+
+Suppose we want to plot the proportions of countries with life expectancy 'q' for a range of different years. R has a built in function for this, plot(ecdf(x)), but suppose we didn't know this. The function is quite easy to build, by turning the code from question 1.1 into a custom function, and then using sapply(). Our custom function will take an input variable 'q', and return the proportion of countries in 'x' less than or equal to q. The curly brackets { and }, allow us to write an R function which spans multiple lines:
+
+```{r custom}
+prop = function(q) {
+  mean(x <= q)
+}
+```
+
+Try this out for a value of 'q':  prop(40)
+
+```{r q=40}
+x <- 40
+prop(x)
+```
+
+
+Now let's build a range of q's that we can apply the function to:
+
+```{r}
+qs = seq(from=min(x), to=max(x), length=20)
+```
+
+Print 'qs' to the R console to see what the seq() function gave us. Now we can use sapply() to apply the 'prop' function to each element of 'qs':
+
+```{r}
+props = sapply(qs, prop)
+```
+
+Take a look at 'props', either by printing to the console, or by plotting it over qs:
+
+```{r}
+props
+plot(qs, props)
+```
+
+Note that we could also have written this in one line, by defining the 'prop' function but without naming it:
+
+```{r}
+props = sapply(qs, function(q) mean(x <= q))
+```
+
+This last style is called using an "inline" function or an "anonymous" function. Let's compare our homemade plot with the pre-built one in R:
+
+```{r}
+ecdf(x)
+plot(ecdf(x))
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
