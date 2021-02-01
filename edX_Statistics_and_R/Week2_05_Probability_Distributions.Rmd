@@ -7,7 +7,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(dplyr)
 ```
 
 <hr style="height:2px;border-width:0;color:gray;background-color:black">
@@ -24,7 +23,7 @@ father_son <- read.delim("father-son.csv",header=TRUE,sep=",")
 
 ### Plot the distribution of the fathers' heights
 
-Since it would be impossible or tedious or uncomfortable to have a look at 1078 observations at once, we rely on their representation by a histogram, which shows the occurrencies for an interval of realizations of heights.
+Since it would be impossible, or tedious, or uncomfortable to have a look at 1078 observations at once, we rely on their representation by a histogram, which shows the occurrences for an interval of realizations of heights.
 
 ```{r means, echo=FALSE}
 hist(father_son$fheight)
