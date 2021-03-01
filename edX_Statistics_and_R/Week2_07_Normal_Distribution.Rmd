@@ -1,0 +1,90 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "28/02/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# The Normal Distribution
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+The one that follows is the formula for the Normal distribution:
+<br></br>
+
+$Pr(a≤x≤b)=\int_{a}^{b}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}}dx$
+<br></br>
+
+What is relevant is the fact that, despite the appearance of complexity, only two numbers are required to define the proportion of numbers between $a$ and $b$: those are $\mu$ and $\sigma$. Whatever $a$ and $b$, knowing the average and the standard deviation is sufficient to determine the proportion of data within that interval: for example, for normally distributed data, 95% of the data will be within two standard deviations from the average. Or 99% of the data will be within 2.5 standard deviations from the average. Or, finally, that around 68% of the data will lie within one standard deviation from the average.
+
+
+### Load the data
+
+```{r data, echo=FALSE}
+library(dplyr)
+father_son <- read.delim("father-son.csv",header=TRUE,sep=",")
+hist(father_son$fheight)
+```
+
+### Show the average and the standard deviation
+
+The following is the formula for the average:
+<br></br>
+
+$\mu=\frac{1}{M}\sum_{i=1}^{M}x_i$
+
+where $M$ is the total number of fathers whose height we collected, and $x_{i}$ is the height of the $i^{th}$ father.
+
+```{r average, echo=FALSE}
+avg_fh <- mean(father_son$fheight)
+print(avg_fh)
+```
+
+The following is the formula for the variance. We compute its square root to get the standard deviation:
+<br></br>
+
+$\sigma^{2}=\frac{1}{M}\sum_{i=1}^{M}(x_{i}-\mu)^{2}$
+
+```{r standard deviation, echo=FALSE}
+sd_fh <- sd(father_son$fheight)
+print(sd_fh)
+```
+
+From the above we see that the data for fathers' heights are approximately normally distributed and that the average height is around 68 inches, while the standard deviation is around 3 inches. This means that if someone asked us to tell her the proportion of fathers whose height is within 65 and 71 inches, we could answer that it is 68%, since 65 and 71 inches are values within one standard deviation from the average.
+
+### Plot the distribution of the fathers' heights
+
+```{r data density, echo=FALSE}
+hist(father_son$fheight,freq=FALSE)
+lines(density(father_son$fheight))
+```
+
+```{r normal density, echo=FALSE}
+data_norm <- rnorm(1078,67.6871,2.744868)
+hist(father_son$fheight,freq=FALSE)
+lines(density(data_norm))
+```
+
+### Compare the percentiles for our data and the theoretical normal distribution (quantile quantile plot)
+
+If we wanted to assess if the data were normally distributed, we could draw a quantile quantile plot. We draw the percentiles for the normally distributed data on the x axis, and the percentiles for our empirical data on the y axis. If the points fall on the identity line, a normal distribution is a good approximation for the distribution of our data.
+
+```{r qqplot, echo=FALSE}
+qqplot(data_norm,father_son$fheight)
+```
+
+### Standard units
+
+If we knew that our data were approximately normally distributed, we could convert them to standard units by subtracting the mean from them and dividing them for the standard deviation:
+
+$Z_{i}=\frac{(X_{i}-\overline{X})}{s_{X}}$
+
+The transformed data will now have mean=0 and standard deviation=1. So now, when we say 1, 2 or 3 standard deviations from the mean, we are not describing any particular unit of measurement, but we are saying that our data are standardized so that they are in effect 1, 2 or 3 standard deviation points away from the zero mean. So, for our standardized heights data: if we have a height of 2, it means that, in effect, we are 2 standard deviations away from the mean, hence we are considering heights that lie in the tails of the distribution (since 95% of the data lie within 2 standard deviations from the mean, we are considering the remaining 5%). If we consider a z of 3 we lie at the very end of the distribution, so we are considering extremely tall people (the remaining 15 of the distribution). 
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
