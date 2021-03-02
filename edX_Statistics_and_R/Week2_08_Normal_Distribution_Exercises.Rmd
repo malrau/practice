@@ -1,0 +1,84 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "02/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Normal Distribution Exercises
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Load the femaleControlsPopulation data set. Here x represents the weights for the entire population.
+
+Using the same process as before (in Null Distribution Exercises), set the seed at 1, then using a for-loop take a random sample of 5 mice 1,000 times. Save these averages. After that, set the seed at 1, then using a for-loop take a random sample of 50 mice 1,000 times. Save these averages.
+
+We recommend you review the video and read the section on normal distribution in the book before tackling these problems:
+
+http://genomicsclass.github.io/book/pages/random_variables.html#normal_distribution
+
+```{r load the data, echo=FALSE}
+control_pop <- unlist(read.delim("femaleControlsPopulation.csv",header=TRUE,sep=","))
+n <- 1000
+set.seed(1)
+samp_avg <- vector("numeric",n)
+for(i in 1:n) {
+  r_samp <- sample(control_pop,5)
+  samp_avg[i] <- mean(r_samp)
+}
+
+set.seed(1)
+samp_avg2 <- vector("numeric",n)
+for(i in 1:n) {
+  r_samp2 <- sample(control_pop,50)
+  samp_avg2[i] <- mean(r_samp2)
+}
+```
+
+
+## Normal Distribution Exercises #1
+
+<font size="0.7">1 point possible (graded)</font>
+
+Use a histogram to "look" at the distribution of averages we get with a sample size of 5 and a sample size of 50. How would you say they differ?
+
+```{r 1, echo=FALSE}
+par(mfrow=c(1,2))
+hist(samp_avg,freq=FALSE)
+hist(samp_avg2,freq=FALSE)
+```
+
+They both look roughly normal, but with a sample size of 50 the spread is smaller.
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Normal Distribution Exercises #2
+
+<font size="0.7">1 point possible (graded)</font>
+
+For the last set of averages, the ones obtained from a sample size of 50, what proportion are between 23 and 25?
+
+```{r 2, echo=FALSE}
+mean(samp_avg2<25)-mean(samp_avg2<23)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Normal Distribution Exercises #3
+
+<font size="0.7">1 point possible (graded)</font>
+
+Now ask the same question of a normal distribution with average 23.9 and standard deviation 0.43.
+
+```{r 3, echo=FALSE}
+x <- rnorm(1000,23.9,0.43)
+mean(x<25)-mean(x<23)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
