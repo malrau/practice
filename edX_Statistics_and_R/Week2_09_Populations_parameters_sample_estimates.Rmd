@@ -1,0 +1,86 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "04/03/2021"
+output: 
+  html_document:
+  dfprint: kable
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Populations, parameters, and sample estimates
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Those that follow are the formulas for the population and the sample averages:
+<br></br>
+
+#### Population averages &emsp; $\mu_{X}=\frac{1}{m}\sum_{i=1}^{m}{x_{i}}$ &emsp; &emsp; &emsp; &emsp; $\mu_{Y}=\frac{1}{n}\sum_{i=1}^{n}{y_{i}}$
+<br>
+
+#### Observations &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; $X_{1},...,X_{M}$ &emsp; &emsp; &emsp; &emsp; $Y_{1},...,Y_{N}$
+<br>
+
+#### Sample averages &emsp; &emsp; $\bar{X}=\frac{1}{M}\sum_{i=1}^{M}{X_{i}}$ &emsp; &emsp; &emsp; &emsp; $\bar{Y}=\frac{1}{N}\sum_{i=1}^{N}{Y_{i}}$
+<br></br>
+
+Based on what we have written above, we see that the population average is denoted by the greek letter $\mu$ and the random variable we're measuring is denote by a capital letter: $X$ for male heights, $Y$ for women's heights. When we extract a sample from the population of interest and we compute the sample average, that is denoted by a bar over the capital letter that defines the random variable ($\bar{X}$ for the average height of the sampled men, $\bar{Y}$ for the average height of the sampled women). 
+
+Statistical inference helps us inferring the population mean without actually knowing it, and by exploiting a limited amount of information extracted from the whole population (the sample). 
+
+If, for example, we measure the heights of 1078 fathers and their sons, we could consider that one as our population. Hence, if we wanted to know if sons are taller than fathers, we could simply compare the population means for the two variables:
+
+```{r data, echo=FALSE}
+father_son <- read.delim("father-son.csv",header=TRUE,sep=",")
+avg_hts <- data.frame(cbind(mean(father_son$fheight),mean(father_son$sheight)))
+colnames(avg_hts) <- c("avg fathers' height","avg sons' height")
+knitr::kable(avg_hts)
+```
+
+```{r diff, include=FALSE}
+diff_hts <- round(abs(mean(father_son$fheight)-mean(father_son$sheight)),digits=3)
+```
+So sons are taller than fathers by exactly `r diff_hts` inches.
+
+The problem with measuring entire populations is that it is often extremely costly. This is where statistical inference becomes useful, because it allows us to infer information for the entire population by exploiting a limited sample of that population.
+
+```{r sample 1, echo=FALSE}
+set.seed(3)
+fath1 <- sample(father_son$fheight,10)
+sons1 <- sample(father_son$sheight,10)
+avg_sam_hts1 <- data.frame(cbind(mean(fath1),mean(sons1)))
+colnames(avg_sam_hts1) <- c("sample avg fathers' height","sample avg sons' height")
+knitr::kable(avg_sam_hts1)
+#dot chart
+#dotchart(as.matrix(cbind(fath1,sons1)),col=c("red","green"))
+
+dotchart(fath1,col="red",xlim=c(62,75))
+points(sons1,1:length(fath1),col="green")
+invisible(sapply(1:length(fath1), function(i) {
+    segments(min(fath1[i], sons1[i]), i,
+         max(fath1[i], sons1[i]), i, lwd = 1)
+}))
+```
+
+The problem of this approach is that, since we could extract a different sample from the population of interest, we could draw entirely different results, even one where the fathers' height is higher than the sons'.
+
+```{r sample 2, echo=FALSE}
+set.seed(2)
+fath2 <- sample(father_son$fheight,10)
+sons2 <- sample(father_son$sheight,10)
+avg_sam_hts2 <- data.frame(cbind(mean(fath2),mean(sons2)))
+colnames(avg_sam_hts2) <- c("sample avg fathers' height","sample avg sons' height")
+knitr::kable(avg_sam_hts2)
+```
+
+This also suggests to us that the difference between two random variables is a random variable as well.
+
+So, how close is the sample average to the population average? Is it reliable? Representative?
+
+The *Central Limit Theorem* helps us answer this and other questions.
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

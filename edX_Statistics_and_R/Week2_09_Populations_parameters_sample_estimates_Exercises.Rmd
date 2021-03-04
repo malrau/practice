@@ -1,0 +1,179 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "04/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Populations, parameters, and sample estimates Exercises
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Load the mice_pheno data set.
+
+```{r load the data, echo=FALSE}
+mice <- read.delim("mice_pheno.csv",header=TRUE,sep=",")
+mice <- na.omit(mice)
+head(mice)
+```
+
+## Populations, parameters, and sample estimates Exercises #1
+
+<font size="0.7">1 point possible (graded)</font>
+
+Use `dplyr` to create a vector `x` with the body weight of all males on the control (`chow`) diet. What is this population's average?
+
+```{r 1, echo=FALSE}
+library(dplyr)
+male_mice <- filter(mice,Sex=="M"&Diet=="chow") #filter male observations with chow diet
+head(male_mice)
+x <- select(male_mice,Bodyweight) %>% unlist() #select bodyweight column and unlist it
+head(x)
+mean(x)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #2
+
+<font size="0.7">1 point possible (graded)</font>
+
+Now use the `rafalib` package and use the `popsd` function to compute the population standard deviation.
+
+```{r 2, echo=FALSE}
+#install.packages("rafalib")
+library(rafalib)
+popsd(x)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #3
+
+<font size="0.7">1 point possible (graded)</font>
+
+Set the `seed` at 1. Take a random sample $X$ of size 25 from `x`. What is the sample average?
+
+```{r 3, echo=FALSE}
+set.seed(1)
+X <- sample(x,25)
+mean(X)
+```
+
+The result returned by sampling is different from the correct one, despite setting the seed at 1. This happens because the course was built when a previous version of R existed. Since R 3.6.0, the random number generator (RNG) used by the `sample` function has been changed. In order to use the old RNG one should first call:
+
+`RNGkind(sample.kind = "Rounding")`
+
+After that one can proceed normally. Hence:
+
+```{r 3 bis, echo=FALSE}
+RNGkind(sample.kind = "Rounding")
+set.seed(1)
+X <- sample(x,25)
+mean(X)
+```
+
+Now this is the correct answer to Exercise 3.
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #4
+
+<font size="0.7">1 point possible (graded)</font>
+
+Use `dplyr` to create a vector `y` with the body weight of all males on the high fat `hf`) diet. What is this population's average?
+
+```{r 4, echo=FALSE}
+library(dplyr)
+y <- filter(mice,Sex=="M"&Diet=="hf") %>% select(Bodyweight) %>% unlist() #filter male observations with hf diet, select bodyweight column and unlist it
+head(y)
+mean(y)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #5
+
+<font size="0.7">1 point possible (graded)</font>
+
+Now use the `rafalib` package and use the `popsd` function to compute the population standard deviation.
+
+```{r 5, echo=FALSE}
+library(rafalib)
+popsd(y)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #6
+
+<font size="0.7">1 point possible (graded)</font>
+
+Set the seed at 1. Take a random sample $Y$ of size 25 from `y.` What is the sample average?
+
+```{r 6, echo=FALSE}
+#Here I deal with the same problem as in Exercise 3.
+RNGkind(sample.kind = "Rounding")
+set.seed(1)
+Y <- sample(y,25)
+mean(Y)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #7
+
+<font size="0.7">1 point possible (graded)</font>
+
+What is the difference in absolute value between $\bar{y}-\bar{x}$ and $\bar{Y}-\bar{X}$?
+
+```{r 7, echo=FALSE}
+
+abs((mean(y)-mean(x))-(mean(Y)-mean(X)))
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #8
+
+<font size="0.7">1 point possible (graded)</font>
+
+Repeat the above for females. Make sure to set the seed to 1 before each sample call. What is the difference in absolute value between $\bar{y}-\bar{x}$ and $\bar{Y}-\bar{X}$?
+
+```{r 8, echo=FALSE}
+x_ <- filter(mice,Sex=="F"&Diet=="chow") %>% select(Bodyweight) %>% unlist()
+y_ <- filter(mice,Sex=="F"&Diet=="hf") %>% select(Bodyweight) %>% unlist()
+RNGkind(sample.kind = "Rounding") #call old RNG
+set.seed(1)
+X_ <- sample(x_,25)
+set.seed(1)
+Y_ <- sample(y_,25)
+abs((mean(y_)-mean(x_))-(mean(Y_)-mean(X_)))
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Populations, parameters, and sample estimates Exercises #9
+
+<font size="0.7">1 point possible (graded)</font>
+
+For the females, our sample estimates were closer to the population difference than with males. What is a possible explanation for this?
+
+The population variance of the females is smaller than that of the males; thus, the sample variable has less variability.
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
