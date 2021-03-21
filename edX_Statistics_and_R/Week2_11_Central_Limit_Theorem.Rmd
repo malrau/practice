@@ -1,0 +1,69 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "05/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Central Limit Theorem (CLT)
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+The Central Limit Theorem tells us that the sample average follows a Normal distribution:
+<br></br>
+
+$\bar{X}\sim{N}(\mu_X,\frac{\sigma_X}{\sqrt{M}})$ &emsp; &emsp; $\bar{Y}\sim{N}(\mu_Y,\frac{\sigma_Y}{\sqrt{N}})$
+<br></br>
+
+$\sigma_X$ is the population standard deviation, which represents the average distance to the population mean. In what follows we define the variance for men and women:
+
+$\sigma^2_X=\frac{1}{m}\sum_{i=1}^{m}(x_i-\mu_X)^2$ &emsp; &emsp;
+$\sigma^2_Y=\frac{1}{n}\sum_{i=1}^{n}(y_i-\mu_Y)^2$
+
+The standard deviation is defined as the square root of the variance and it tells us the distance of a typical individual from the mean, and so it gives us an idea of how much the population varies from around the mean.
+
+To unerstand what the CLT tells us, we consider again that the sample mean is a random variable: everytime we take a sample, its mean will be different from the others. 
+
+```{r data, echo=FALSE}
+#library(dplyr)
+father_son <- read.delim("father-son.csv",header=TRUE,sep=",")
+set.seed(1)
+s1 <- sample(father_son$fheight,10)
+mean(s1)
+m_ten <- vector("numeric",length=200)
+for(i in 1:200) {
+  #set.seed([i])
+  s <- sample(father_son$fheight,10)
+  m_ten[i] <- mean(s)
+}
+
+m_fifty <- vector("numeric",length=200)
+for(i in 1:200) {
+  #set.seed([i])
+  s <- sample(father_son$fheight,50)
+  m_fifty[i] <- mean(s)
+}
+
+par(mfrow=c(1,2))
+hist(m_ten[1:50],xlim=c(65,70))
+hist(m_fifty[1:50],xlim=c(65,70))
+hist(m_ten[1:100],xlim=c(65,70))
+hist(m_fifty[1:100],xlim=c(65,70))
+hist(m_ten[1:150],xlim=c(65,70))
+hist(m_fifty[1:150],xlim=c(65,70))
+hist(m_ten[1:200],xlim=c(65,70))
+hist(m_fifty[1:200],xlim=c(65,70))
+```
+As we see by comparing the histograms for the two random variables (one is the sample average for samples of 10 individuals, the other is the sample average for samples of 50 individuals), in both cases as we add observations of the random variable the histogram is closer and closer to the normal distribution. But we also see a huge difference between the two random variables: the distribution of the sample means is more spread out for the smaller samples. In fact, this is one of the properties of the normal distribution that is derived from the CLT: the sample average follows a Normal distribution with mean at the population average and standard deviation at the population standard deviation divided by the square root of the sample size. Hence, the larger the sample size, the less spread out the distribution of the sample mean.
+
+### Difference of the means
+
+We are interested in knowing if the two means are different:
+$\frac{\bar{Y}-\bar{X}}{\sqrt{\sigma^2_X+\sigma^2_Y}}\sim{N(0,1)}$
+We understand now that this difference is a random variable as well as the two sample averages. In fact, every time we take two new samples from the two populations we will get two different sample averages, and their difference will be always different. How different could these differences be? How much will they vary? Or, rather, how much do the realizations of this random variable vary? The CLT tells us that, since the two random variables are normal, their difference will also be normal. And, if the two random variables are independent, the variance of their difference is the sum of their variances. Hence, if we divide the difference by it standard deviation (square root of the variance (which is the sum of the variances)), it will be normally distributed with mean at zero and standard deviation 1. We consider that the mean is zero because we are considering the Null hypothesis, the possibility that men and women have the same heights, hence the two random variables have the same distributions and their difference is zero.
+The main problem in the above formula is that we don't know the population standard deviations.
