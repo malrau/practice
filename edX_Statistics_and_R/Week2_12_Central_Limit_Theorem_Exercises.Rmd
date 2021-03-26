@@ -1,0 +1,199 @@
+---
+title: "edX - Statistics and R"
+author: "Maurizio La Rosa"
+date: "25/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+# Central Limit Theorem (CLT) Exercises
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Load the mice_pheno data set.
+
+```{r load the data, echo=FALSE}
+mice <- read.delim("mice_pheno.csv",header=TRUE,sep=",")
+mice <- na.omit(mice)
+head(mice)
+```
+
+## Central Limit Theorem (CLT) Exercises #1
+
+<font size="0.7">1 point possible (graded)</font>
+
+If a list of numbers has a distribution that is well approximated by the normal distribution, what proportion of these numbers are within one standard deviation away from the list's average?
+
+68%
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #2
+
+<font size="0.7">1 point possible (graded)</font>
+
+What proportion of these numbers are within two standard deviations away from the list's average?
+
+95%
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #3
+
+<font size="0.7">1 point possible (graded)</font>
+
+What proportion of these numbers are within three standard deviations away from the list's average?
+
+99%
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #4
+
+<font size="0.7">1 point possible (graded)</font>
+
+Define `y` to be the weights of males on the control diet. What proportion of the mice are within one standard deviation away from the average weight (remember to use `popsd` for the population `sd`)?
+
+```{r 4, echo=FALSE}
+library(dplyr)
+y <- filter(mice,Sex=="M"&Diet=="chow") %>% select(Bodyweight) %>% unlist() #filter male observations with hf diet, select bodyweight column and unlist it
+head(y)
+mean(y)
+library(rafalib)
+my <- (y-mean(y)) #observations minus the population mean
+z <- my/popsd(y) #by dividing the distances from the mean by the standard deviation, we know that the values smaller than 1 in absolute value are within one standard deviation from the mean.
+mean(abs(z)<1) #by taking their mean we get the desired proportion
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #5
+
+<font size="0.7">1 point possible (graded)</font>
+
+What proportion of these numbers are within two standard deviations away from the list's average?
+
+```{r 5, echo=FALSE}
+mean(abs(my/popsd(y))<2) #by dividing the distances from the mean by the standard deviation, we know that the values smaller than 2 in absolute value are within two standard deviations from the mean. By taking their mean we get the desired proportion
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #6
+
+<font size="0.7">1 point possible (graded)</font>
+
+What proportion of these numbers are within three standard deviations away from the list's average?
+
+```{r 6, echo=FALSE}
+mean(abs(my/popsd(y))<3) #by dividing the distances from the mean by the standard deviation, we know that the values smaller than 3 in absolute value are within three standard deviations from the mean. By taking their mean we get the desired proportion
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #7
+
+<font size="0.7">1 point possible (graded)</font>
+
+Note that the numbers for the normal distribution and our weights are relatively close. Also, notice that we are indirectly comparing quantiles of the normal distribution to quantiles of the mouse weight distribution. We can actually compare all quantiles using a qqplot. Which of the following best describes the qq-plot comparing mouse weights to the normal distribution?
+
+```{r 7, echo=FALSE}
+qqnorm(z)
+abline(0,1)
+```
+
+- The points on the qq-plot fall exactly on the identity line.
+- The average of the mouse weights is not 0 and thus it can't follow a normal distribution.
+- The mouse weights are well approximated by the normal distribution, although the larger values (right tail) are larger than predicted by the normal. This is consistent with the differences seen between question 3 and 6. (correct answer)
+- These are not random variables and thus they can't follow a normal distribution.
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #8
+
+<font size="0.7">1 point possible (graded)</font>
+
+Create the above qq-plot for the four populations: male/females on each of the two diets. What is the most likely explanation for the mouse weights being well approximated? What is the best explanation for all these being well approximated by the normal distribution?
+
+```{r 8, echo=FALSE}
+y <- filter(mice,Sex=="M"&Diet=="chow") %>% select(Bodyweight) %>% unlist()
+my <- (y-mean(y))
+z <- my/popsd(y)
+y1 <- filter(mice,Sex=="M"&Diet=="hf") %>% select(Bodyweight) %>% unlist()
+my1 <- (y1-mean(y1))
+z1 <- my1/popsd(y1)
+y2 <- filter(mice,Sex=="F"&Diet=="chow") %>% select(Bodyweight) %>% unlist()
+my2 <- (y2-mean(y2))
+z2 <- my2/popsd(y2)
+y3 <- filter(mice,Sex=="F"&Diet=="hf") %>% select(Bodyweight) %>% unlist()
+my3 <- (y3-mean(y3))
+z3 <- my3/popsd(y3)
+
+#par(mfrow=c(2,2))
+mypar(2,2)
+qqnorm(z)
+abline(0,1)
+qqnorm(z1)
+abline(0,1)
+qqnorm(z2)
+abline(0,1)
+qqnorm(z3)
+abline(0,1)
+```
+
+- The CLT tells us that sample averages are approximately normal.
+- This just happens to be how nature behaves in this particular case. Perhaps the result of many biological factors averaging out. (correct answer)
+- Everything measured in nature follows a normal distribution.
+- Measurement error is normally distributed.
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #9
+
+<font size="0.7">1 point possible (graded)</font>
+
+Here we are going to use the function `replicate` to learn about the distribution of random variables. All the above exercises relate to the normal distribution as an approximation of the distribution of a fixed list of numbers or a population. We have not yet discussed probability in these exercises. If the distribution of a list of numbers is approximately normal, then if we pick a number at random from this distribution, it will follow a normal distribution. However, it is important to remember that stating that some quantity has a distribution does not necessarily imply this quantity is random. Also, keep in mind that this is not related to the central limit theorem. The central limit applies to averages of random variables. Let's explore this concept.
+
+We will now take a sample of size 25 from the population of males on the chow diet. The average of this sample is our random variable. We will use the `replicate` to observe 10,000 realizations of this random variable. Set the seed at 1, generate these 10,000 averages. Make a histogram and qq-plot of these 10,000 numbers against the normal distribution.
+
+We can see that, as predicted by the CLT, the distribution of the random variable is very well approximated by the normal distribution.
+
+```{r 9, echo=FALSE}
+set.seed(1)
+avgs <- replicate(10000,mean(sample(y,25)))
+mypar(1,2)
+hist(avgs)
+qqnorm(avgs)
+qqline(avgs)
+mean(avgs)
+```
+
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+## Central Limit Theorem (CLT) Exercises #10
+
+<font size="0.7">1 point possible (graded)</font>
+
+What is the standard deviation of the distribution of sample averages?
+
+```{r 10, echo=FALSE}
+sd(avgs)
+```
+
+<hr style="height:2px;border-width:0;color:gray;background-color:black">
+<br></br>
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
